@@ -1,4 +1,9 @@
 import rclpy
+# TODO (v0.1):
+#   - Wire this node to the real SeekSense API.
+#   - Implement search_start / search_next / search_verify calls.
+#   - Convert returned waypoints into Nav2 goals and log search traces.
+
 from rclpy.node import Node
 
 from geometry_msgs.msg import PoseStamped
