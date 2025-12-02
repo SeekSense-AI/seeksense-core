@@ -39,6 +39,38 @@ SeekSense provides a **training-free “find-by-name” API** that lets robots s
     - `search_verify`
     - `checkpoint`
 
+    ## Roadmap
+
+This repository is the R&D core for SeekSense AI – a training-free semantic search layer for indoor mobile robots. The focus is to move in small, testable steps:
+
+### v0.1 – Simulation prototype (0–3 months)
+- ROS2 + Nav2 simulation (Gazebo or similar).
+- Single-robot corridor + bays world.
+- End-to-end semantic search loop:
+  - `search_start` → `search_next` → `search_verify`.
+- Baseline vs SeekSense-style search comparison:
+  - time-to-find,
+  - path length,
+  - success rate.
+
+### v0.2 – Single-robot MVP in a real environment (3–9 months)
+- Expose SeekSense as a documented API.
+- Integrate with one real indoor robot (e.g. lab platform / AMR).
+- Run “find-by-name” tasks (e.g. trolleys, pallets, equipment).
+- Capture metrics:
+  - reduction in custom engineering effort per site,
+  - time saved versus naïve scripts.
+
+### v0.3 – Multi-site robustness & partner pilots (9–18 months)
+- Support 2–3 different environments (warehouse / hospital / campus).
+- Harden logging, replay, and grading tools for partner teams.
+- Add early features on top of the same loop:
+  - better failure modes (“likely upstairs / blocked area”),
+  - multi-target search,
+  - simple semantic memory (“where was it last seen?”).
+
+The repo is intentionally small at this stage: the goal is to show clear, iterative progress from prototype → MVP → multi-site pilots.
+
 ## Status
 
 This repo is currently an **early R&D scaffold**:
