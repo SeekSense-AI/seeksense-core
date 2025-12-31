@@ -1,0 +1,15 @@
+{
+  "run_id": "20251231_172032",
+  "num_frontier_cells": 404,
+  "num_clusters": 1,
+  "ranked_top5": [
+    {
+      "score": 0.9428037405014038,
+      "centroid_rc": [
+        57.23514938354492,
+        81.06188201904297
+      ],
+      "cluster_size": 404
+    }
+  ]
+}
