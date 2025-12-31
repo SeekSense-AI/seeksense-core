@@ -10,13 +10,13 @@ class Observation:
     center_rc: tuple[int, int]
     score: float
     confidence: float
-    radius_cells: int = 10
+    radius_cells: int = 12
 
 
 def apply_observation(vm: ValueMap, obs: Observation) -> None:
     """
-    Applies a gaussian patch to the ValueMap using the existing vm.update_patch(...)
-    without modifying ValueMap internals.
+    Apply a gaussian patch to the map using the existing vm.update_patch(...)
+    without changing ValueMap internals.
     """
     h, w = vm.value.shape
     cr, cc = obs.center_rc
@@ -32,7 +32,7 @@ def apply_observation(vm: ValueMap, obs: Observation) -> None:
     sigma2 = max(1.0, (r * 0.6) ** 2)
     kernel = np.exp(-dist2 / (2.0 * sigma2)).astype(np.float32)
 
-    value_patch = (obs.score * kernel).astype(np.float32)
-    conf_patch = (obs.confidence * np.ones_like(kernel, dtype=np.float32))
+    value_patch = (float(obs.score) * kernel).astype(np.float32)
+    conf_patch = (float(obs.confidence) * np.ones_like(kernel, dtype=np.float32))
 
     vm.update_patch(r0, c0, value_patch, conf_patch)

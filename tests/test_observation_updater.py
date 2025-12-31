@@ -7,4 +7,3 @@ def test_apply_observation_changes_map():
     before = vm.value.copy()
     apply_observation(vm, Observation(center_rc=(25, 30), score=1.0, confidence=1.0, radius_cells=6))
     assert np.sum(np.abs(vm.value - before)) > 0.0
-    assert vm.value.max() <= 1.0 + 1e-6

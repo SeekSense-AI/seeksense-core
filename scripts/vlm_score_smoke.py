@@ -15,9 +15,7 @@ from vlfm_repro.vlm.observation_updater import Observation, apply_observation
 
 def load_image(path: str | None) -> np.ndarray:
     if path is None:
-        # fallback: synthetic image
-        img = np.random.default_rng(0).random((224, 224)).astype(np.float32)
-        return img
+        return np.random.default_rng(0).random((224, 224)).astype(np.float32)
     arr = mpimg.imread(path)
     arr = np.asarray(arr, dtype=np.float32)
     if arr.max() > 1.0:
@@ -27,7 +25,7 @@ def load_image(path: str | None) -> np.ndarray:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--image", type=str, default=None, help="Path to an image (optional)")
+    ap.add_argument("--image", type=str, default=None, help="Optional path to an image")
     ap.add_argument("--prompt", type=str, default="chair", help="Text prompt")
     ap.add_argument("--seed", type=int, default=0, help="Dummy scorer seed")
     ap.add_argument("--out", type=str, default="results/vlm_smoke", help="Output folder")
@@ -43,11 +41,11 @@ def main():
     vm = ValueMap.zeros(120, 160)
     apply_observation(vm, Observation(center_rc=(55, 80), score=score, confidence=conf, radius_cells=14))
 
-    # Save json
-    payload = {"prompt": args.prompt, "seed": args.seed, "score": float(score), "confidence": float(conf)}
-    (out_dir / "vlm_score.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    (out_dir / "vlm_score.json").write_text(
+        json.dumps({"prompt": args.prompt, "seed": args.seed, "score": float(score), "confidence": float(conf)}, indent=2),
+        encoding="utf-8",
+    )
 
-    # Save value map image
     plt.figure()
     plt.imshow(vm.value, origin="lower")
     plt.title(f"ValueMap (score={score:.2f}, conf={conf:.2f})")
