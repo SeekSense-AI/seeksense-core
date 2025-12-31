@@ -8,3 +8,10 @@ __pycache__/
 # Python packaging build artifacts
 *.egg-info/
 src/*.egg-info/
+
+# Stage D runs can get large
+results/habitat_runs/
+results/**/*.mp4
+results/**/*.log
+results/**/*.npz
+results/**/*.npy
