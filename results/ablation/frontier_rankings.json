@@ -1,0 +1,49 @@
+{
+  "seed": 0,
+  "num_frontier_cells": 394,
+  "num_clusters": 1,
+  "modes": {
+    "low_conf_patch": [
+      {
+        "score": 0.001793761970475316,
+        "centroid_rc": [
+          53.76395797729492,
+          79.75634765625
+        ],
+        "centroid_xy": [
+          4.025,
+          2.725
+        ],
+        "cluster_size": 394
+      }
+    ],
+    "high_conf_patch": [
+      {
+        "score": 0.728005051612854,
+        "centroid_rc": [
+          53.76395797729492,
+          79.75634765625
+        ],
+        "centroid_xy": [
+          4.025,
+          2.725
+        ],
+        "cluster_size": 394
+      }
+    ],
+    "fused": [
+      {
+        "score": 0.5860625505447388,
+        "centroid_rc": [
+          53.76395797729492,
+          79.75634765625
+        ],
+        "centroid_xy": [
+          4.025,
+          2.725
+        ],
+        "cluster_size": 394
+      }
+    ]
+  }
+}
