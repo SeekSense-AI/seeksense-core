@@ -1,9 +1,5 @@
 .DS_Store
 
-__pycache__/
-*.pyc
-.DS_Store
-.venv/
 
 # Python packaging build artifacts
 *.egg-info/
@@ -15,3 +11,9 @@ results/**/*.mp4
 results/**/*.log
 results/**/*.npz
 results/**/*.npy
+
+# macOS + Python
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
