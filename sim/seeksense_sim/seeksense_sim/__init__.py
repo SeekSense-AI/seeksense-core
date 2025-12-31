@@ -1,1 +1,0 @@
-# SeekSense simulation integration package
