@@ -1,79 +1,70 @@
-# SeekSense AI – Training-Free Semantic Search for Robots
+# SeekSense Core — VLFM Reproduction Track (Stage A→D)
 
-This repository contains the early R&D work for **SeekSense AI** – a semantic search layer for indoor mobile robots.
+This repository is a **reproducible engineering track** to build the core components described in the VLFM pipeline:
+**occupancy + frontier mapping → frontier scoring interface → (optional) Habitat smoke-run outputs**.
 
-SeekSense provides a **training-free “find-by-name” API** that lets robots search for objects and locations in unfamiliar environments using natural language (e.g. _“find the cleaning trolley near ward C”_, _“locate pallet 18B in aisle 4”_). The API sits on top of existing navigation stacks (e.g. ROS2 + Nav2) and focuses on semantic frontier mapping, waypoint selection and safe approach poses.
+**Important note (credit / attribution):**
+- Research inspiration: *VLFM (Vision-Language Frontier Maps)*, arXiv:2312.03275.
+- This repo implements a **clean-room re-implementation** of the *mapping + frontier extraction + scoring interfaces* needed to reproduce the method.
+- Where external code is used (e.g., Habitat baselines / official VLFM repo), we link and document it in `docs/` and do not copy proprietary code.
 
-## Repository layout
+## What’s implemented right now (Stage A–C)
+- ✅ **Occupancy grid + frontier extraction** (unit-tested)
+- ✅ **Frontier clustering + centroid waypoints**
+- ✅ **Value-map + confidence-map interfaces** (model-agnostic; BLIP-2 integration later)
+- ✅ **Frontier ranking logic** (uses value map around each frontier cluster)
+- ✅ **Synthetic example generator** that outputs `results/frontier_map_example.png`
 
-- `docs/`
-  - **`architecture.md`** – Technical architecture & semantic search flow.
-  - **`simulation-evaluation-v0.md`** – Simulation & evaluation plan for the first prototype (v0).
-- `sim/`
-  - `seeksense_sim/` – Placeholder ROS2 package for integrating SeekSense with a Nav2-based robot stack.
+## Repository structure
+```
+.
+├─ docs/
+│  ├─ 01_paper_breakdown.md
+│  ├─ 02_scope.md
+│  └─ 03_stage_d_habitat_smoke_run.md
+├─ src/vlfm_repro/
+│  ├─ mapping/occupancy_grid.py
+│  ├─ frontier/frontier_extractor.py
+│  ├─ vlm/value_map.py
+│  └─ nav/frontier_ranker.py
+├─ scripts/
+│  └─ generate_synthetic_frontier_example.py
+├─ tests/
+│  ├─ test_frontier_extraction.py
+│  └─ test_frontier_ranking.py
+├─ results/              # generated artefacts (png/json logs)
+├─ REPRODUCIBILITY.md
+├─ pyproject.toml
+└─ requirements.txt
+```
 
-## Current focus (v0.1 – Simulation prototype)
+## Quickstart
+### 1) Install
+```bash
+python -m venv .venv
+source .venv/bin/activate  # (Windows: .venv\Scripts\activate)
+pip install -r requirements.txt
+```
 
-- Run a full **semantic search loop** in ROS2 + Nav2 simulation (Gazebo or similar):
-  - Subscribe to `/camera/image_raw` and pose (`/odom` or `/tf`).
-  - Implement a basic semantic frontier map and scoring loop (placeholder initially).
-  - Generate waypoints and verify a target object in a simple world (corridor + bays + trolley).
-- Capture metrics for:
-  - Time-to-find vs a simple baseline (e.g. naïve sweep).
-  - Success rate.
-  - Qualitative behaviour (search trace, coverage).
+### 2) Run tests
+```bash
+pytest -q
+```
 
-## Tech stack (planned)
+### 3) Generate a real output artefact (no simulator needed)
+```bash
+python scripts/generate_synthetic_frontier_example.py
+```
+This will create:
+- `results/frontier_map_example.png`
+- `results/frontier_waypoints.json`
 
-- **Robot side**
-  - ROS2 Humble
-  - Nav2 for navigation and safety
-  - RGB / RGB-D camera
+## Stage D (optional): Habitat smoke run
+Stage D is intentionally separated because Habitat installation is heavy and hardware-dependent.
 
-- **SeekSense side**
-  - Python-based backend (prototype)
-  - Semantic frontier mapping
-  - Session API:
-    - `search_start`
-    - `search_next`
-    - `search_verify`
-    - `checkpoint`
+See:
+- `docs/03_stage_d_habitat_smoke_run.md`
+- Add your run artefacts under `results/habitat_runs/` (logs + maps + metrics)
 
-    ## Roadmap
-
-This repository is the R&D core for SeekSense AI – a training-free semantic search layer for indoor mobile robots. The focus is to move in small, testable steps:
-
-### v0.1 – Simulation prototype (0–3 months)
-- ROS2 + Nav2 simulation (Gazebo or similar).
-- Single-robot corridor + bays world.
-- End-to-end semantic search loop:
-  - `search_start` → `search_next` → `search_verify`.
-- Baseline vs SeekSense-style search comparison:
-  - time-to-find,
-  - path length,
-  - success rate.
-
-### v0.2 – Single-robot MVP in a real environment (3–9 months)
-- Expose SeekSense as a documented API.
-- Integrate with one real indoor robot (e.g. lab platform / AMR).
-- Run “find-by-name” tasks (e.g. trolleys, pallets, equipment).
-- Capture metrics:
-  - reduction in custom engineering effort per site,
-  - time saved versus naïve scripts.
-
-### v0.3 – Multi-site robustness & partner pilots (9–18 months)
-- Support 2–3 different environments (warehouse / hospital / campus).
-- Harden logging, replay, and grading tools for partner teams.
-- Add early features on top of the same loop:
-  - better failure modes (“likely upstairs / blocked area”),
-  - multi-target search,
-  - simple semantic memory (“where was it last seen?”).
-
-The repo is intentionally small at this stage: the goal is to show clear, iterative progress from prototype → MVP → multi-site pilots.
-
-## Status
-
-This repo is currently an **early R&D scaffold**:
-- Documentation first (`docs/`).
-- ROS2 simulation package skeleton in `sim/`.
-- Algorithms and API implementation to be added iteratively based on pilots and experiments.
+## License
+MIT (see `LICENSE`).
